@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Guess Number</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 95vh;
+      font-family: Arial, sans-serif;
+      font-size: medium;
+      background-color: #1c1c1c;
+    }
+
+    div.outerbox {
+      text-align: center;
+      color: white;
+    }
+
+    #number {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100px;
+      width: 100px;
+      background-color: white;
+      color: black;
+      margin: auto;
+      border-radius: 15%;
+      transition: transform 0.2s;
+      transform-style: preserve-3d;
+    }
+
+    .rotated {
+      transform: rotateY(360deg);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="outerbox">
+    <h1>Guess the Number Game</h1>
+    <p>Try to guess the number between 1 - 9</p>
+    <div id="number"></div>
+    <br />
+    <input type="number" id="quantity" name="quantity" min="1" max="9" />
+    <button id="myBtn" onclick="checkNumber()">Guess</button>
+    <p id="message"></p>
+    <button onclick="location.reload()">Refresh / Play Again</button>
+    <br>
+  </div>
+
+  <script>
+    let prevValue;
+    let attempts = 1;
+
+    const numbers = Array(9).fill().map((_, i) => i + 1);
+    let randomNum = Math.ceil(Math.random() * numbers.length);
+    console.log(randomNum);
+
+    const checkNumber = () => {
+      const currentValue = document.getElementById("quantity").value;
+      console.log('prevValue: ', prevValue)
+      console.log('currentValue: ', currentValue)
+
+      if (currentValue == '') {
+        document.getElementById("message").textContent =
+          "Enter a Number";
+      } else if (currentValue === prevValue) {
+        document.getElementById("message").textContent =
+          "Value hasn't changed";
+      } else {
+        let msg = '';
+        if (parseInt(currentValue) === randomNum) {
+          msg = `Congratulations! You guessed the correct number in ${attempts} attempts.`;
+          const number = document.getElementById("number");
+          number.classList.add('rotated');
+          number.style.backgroundColor = "green";
+          number.innerText = randomNum;
+          document.getElementById("myBtn").disabled = true;
+        } else if (parseInt(currentValue) > randomNum) {
+          msg = `Number is less than ${currentValue}. Try again!`;
+          attempts++;
+        } else {
+          msg = `Number is greater than ${currentValue}. Try again!`;
+          attempts++;
+        }
+
+        document.getElementById("message").textContent = msg;
+
+        prevValue = currentValue;
+      }
+    };
+  </script>
+</body>
+
+</html>
